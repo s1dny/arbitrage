@@ -1,3 +1,6 @@
+use thirtyfour::prelude::*;
+use tokio;
+
 struct Arbitrage {
     bet: f32,
     odd_1: f32,
@@ -27,11 +30,24 @@ impl Arbitrage {
 }
 
 
-fn main() {
-    let bet = Arbitrage{bet: 100.0, odd_1: 1.2, odd_2: 2.1};
+
+#[tokio::main]
+async fn main() -> WebDriverResult<()> {
+    let mut caps = DesiredCapabilities::chrome();
+    caps.set_headless()?;
+    let driver = WebDriver::new("http://localhost:9515", caps).await?;
+
+    driver.goto("https://www.ladbrokes.com.au/racing/newcastle/4e4e11b4-25f9-4111-91d6-b60b11305c69").await?;
+
+    let bet = Arbitrage{bet: 100.0, odd_1: 8.2, odd_2: 2.1};
     println!("Bet 1: ${:.2}\nBet 2: ${:.2}", bet.stake_1(), bet.stake_2());
    
     println!("Payout: ${:.2}\nProfit: ${:.2}", bet.payout(), bet.profit());
 
     println!("ROI: {:.2}%", bet.roi());
+
+    driver.quit().await?;
+
+    Ok(())
+
 }
