@@ -5,46 +5,28 @@ use std::collections::HashMap;
 struct Arbitrage {
     bet: f64,
     round: f64,
-    odds: Vec<f64>,
-    stakes: Vec<f64>
-}
-
-#[derive(Debug)]
-struct HashArbitrage {
-    bet: f64,
-    round: f64,
     odds: HashMap<String, (String, f64)>,
     stakes: HashMap<String, (String, f64)>
 }
 
-impl HashArbitrage {
-    fn payout(&self) -> f64 {
-        let mut total = 0.0;
-        for (bookmaker, game) in &self.odds{
-            println!("{:?}", self.stakes.get(bookmaker).unwrap().1);
-        }
-        self.odds.values().next().unwrap().1 * self.stakes.values().next().unwrap().1 * self.bet
-    }
-}
-
 impl Arbitrage {
-    // total payout of the arbitrage including the initial bet
     fn payout(&self) -> f64 {
-        let mut total = 0.0;
-        for i in 0..self.stakes.len(){
-            total += self.stakes[i] * self.odds[i]
+        if (self.odds.len() < 2) || (self.stakes.len() < 2) {
+            return 0.0;
         }
-        total / self.stakes.len() as f64
+        let mut total = 0.0;
+        for (bookmaker, _) in &self.odds{
+            total += self.stakes.get(bookmaker).unwrap().1 * self.odds.get(bookmaker).unwrap().1
+        }
+        total / self.odds.len() as f64 * self.bet
     }
 
-    // total payout minus the initial bet
     fn profit(&self) -> f64 {
         Arbitrage::payout(&self) - self.bet
     }
 
-    // return on investment
     fn roi(&self) -> f64 {
-        Arbitrage::payout(&self) * 100.0 / self.bet - 100.0
+        Arbitrage::profit(&self) * 100.0 / Arbitrage::payout(&self)
     }
 }
 
@@ -72,7 +54,7 @@ fn stakes(odds: HashMap<String, (String, f64)>) -> HashMap<String, (String, f64)
     let mut stakes: HashMap<String, (String, f64)> = HashMap::new();
     let mut sum = 0.0;
 
-    for (bookmaker, game) in &odds{
+    for (_, game) in &odds{
         sum += 1.0 / game.1
     }
     for (bookmaker, game) in &odds{
@@ -82,66 +64,54 @@ fn stakes(odds: HashMap<String, (String, f64)>) -> HashMap<String, (String, f64)
 }
 
 fn main() {
-    // let mut bet = Arbitrage{bet: 50.0,
-    //                     round: 0.1,
-    //                     odds: optimal.clone(),
-    //                     stakes: stakes
-    //                    };
-    
-    // bet.stakes();
-
-    // println!("Odds to bet on: {:?}", optimal.clone());
-    // println!("Amount to bet: {:?}", bet.stakes);
-
-    // println!("\nExpected Results\n");
-
-    // println!("Payout: ${:.2}\nProfit: ${:.2}", bet.payout(), bet.profit());
-    // println!("ROI: {:.2}%", bet.roi());
-
-
     let client = Client::new();
 
     let bets = client
-        .get("https://api.the-odds-api.com/v4/sports/aussierules_afl/odds/?regions=au&apiKey=d443ff82e9e449b15e401e238d5adc8a")
+        .get("https://api.the-odds-api.com/v4/sports/soccer_belgium_first_div/odds/?regions=au&apiKey=d443ff82e9e449b15e401e238d5adc8a")
         .send()
         .unwrap()
         .json::<Value>()
         .unwrap();
 
-    for i in 0..5 {
+    for i in 0..20 {
         let mut odds: HashMap<String, ((String, f64), (String, f64))> = HashMap::new();
-        for j in 0..9 {
+        for j in 0..15 {
             let bookmaker = &bets[i]["bookmakers"][j]["markets"][0]["outcomes"];
             let name = &bets[i]["bookmakers"][j]["key"];
+                if name != "betfair_ex_au" {
+                    let outcome_0 = bookmaker[0]["name"].as_str();
+                    let price_0 = bookmaker[0]["price"].as_f64();
 
-            if name != "betfair_ex_au"{
-                odds.insert(
-                    name.to_string(),
-                    (
-                        (
-                            bookmaker[0]["name"].to_string(),
-                            bookmaker[0]["price"].as_f64().unwrap()
-                        ),
-                        (
-                            bookmaker[1]["name"].to_string(),
-                            bookmaker[1]["price"].as_f64().unwrap()
-                        )
-                    )
-                );
-            }
+                    let outcome_1 = bookmaker[1]["name"].as_str();
+                    let price_1 = bookmaker[1]["price"].as_f64();
+
+                    if let (Some(outcome_0), Some(price_0), Some(outcome_1), Some(price_1)) = (outcome_0, price_0, outcome_1, price_1) {
+                        odds.insert(
+                            name.to_string(),
+                            (
+                                (outcome_0.to_string(), price_0),
+                                (outcome_1.to_string(), price_1)
+                            )
+                        );
+                    } else {
+                        continue;
+                    }
+                }       
         }
 
         let optimal = optimal(odds.clone());
         let stakes = stakes(optimal.clone());
 
-        let bets = HashArbitrage{
-                                     bet: 100.0,
-                                     round: 5.0,
-                                     odds: optimal.clone(),
-                                     stakes: stakes
-                                    };
-                                
-        println!("Payout: {}", bets.payout());
+        let bets = Arbitrage{
+                                bet: 500.0,
+                                round: 5.0,
+                                odds: optimal.clone(),
+                                stakes: stakes
+                            };
 
+        let roi = bets.roi();
+        let color_code = if roi > 0.0 { "\x1b[32m" } else { "\x1b[31m" };
+
+        println!("ROI: {}{:.2}%\x1b[0m PROFIT: {}${:.2}\x1b[0m", color_code, roi, color_code, bets.profit());
     }
 }
