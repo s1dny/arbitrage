@@ -3,17 +3,28 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 struct Arbitrage {
-    bet: f64, //change to stake
+    bet: f64,
     round: f64,
     odds: Vec<f64>,
     stakes: Vec<f64>
 }
 
+#[derive(Debug)]
 struct HashArbitrage {
-    stake: f64,
+    bet: f64,
     round: f64,
     odds: HashMap<String, (String, f64)>,
-    bets: HashMap<String, (String, f64)>
+    stakes: HashMap<String, (String, f64)>
+}
+
+impl HashArbitrage {
+    fn payout(&self) -> f64 {
+        let mut total = 0.0;
+        for (bookmaker, game) in &self.odds{
+            println!("{:?}", self.stakes.get(bookmaker).unwrap().1);
+        }
+        self.odds.values().next().unwrap().1 * self.stakes.values().next().unwrap().1 * self.bet
+    }
 }
 
 impl Arbitrage {
@@ -91,7 +102,7 @@ fn main() {
     let client = Client::new();
 
     let bets = client
-        .get("https://api.the-odds-api.com/v4/sports/aussierules_afl//odds/?regions=au&apiKey=d443ff82e9e449b15e401e238d5adc8a")
+        .get("https://api.the-odds-api.com/v4/sports/aussierules_afl/odds/?regions=au&apiKey=d443ff82e9e449b15e401e238d5adc8a")
         .send()
         .unwrap()
         .json::<Value>()
@@ -123,7 +134,14 @@ fn main() {
         let optimal = optimal(odds.clone());
         let stakes = stakes(optimal.clone());
 
-        println!("{:?}", optimal);
-        println!("{:?}", stakes)
+        let bets = HashArbitrage{
+                                     bet: 100.0,
+                                     round: 5.0,
+                                     odds: optimal.clone(),
+                                     stakes: stakes
+                                    };
+                                
+        println!("Payout: {}", bets.payout());
+
     }
 }
