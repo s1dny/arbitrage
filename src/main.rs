@@ -3,22 +3,20 @@ use serde_json::Value;
 use std::collections::HashMap;
 
 struct Arbitrage {
-    bet: f64,
+    bet: f64, //change to stake
     round: f64,
     odds: Vec<f64>,
     stakes: Vec<f64>
 }
 
-impl Arbitrage {
-    fn stakes(&mut self) -> Vec<f64> {
-        let mut stakes = Vec::new();
-        for i in 0..self.stakes.len() {
-            stakes.push((self.stakes[i] * self.bet / self.round).round() * self.round);
-        }
-        self.stakes = stakes;
-        Vec::new()
-    }
+struct HashArbitrage {
+    stake: f64,
+    round: f64,
+    odds: HashMap<String, (String, f64)>,
+    bets: HashMap<String, (String, f64)>
+}
 
+impl Arbitrage {
     // total payout of the arbitrage including the initial bet
     fn payout(&self) -> f64 {
         let mut total = 0.0;
@@ -59,33 +57,20 @@ fn optimal(odds: HashMap<String, ((String, f64), (String, f64))>) -> HashMap<Str
     combined
 }
 
-fn stakes_hash(odds: HashMap<String, (String, f64)>) -> f64 {
+fn stakes(odds: HashMap<String, (String, f64)>) -> HashMap<String, (String, f64)>  {
+    let mut stakes: HashMap<String, (String, f64)> = HashMap::new();
     let mut sum = 0.0;
-    // println!("{:?}", odds);
+
     for (bookmaker, game) in &odds{
         sum += 1.0 / game.1
     }
     for (bookmaker, game) in &odds{
-        let a = (1.0 / game.1) / sum;
-        println!("{}: {} {:?}", a * game.1 * 100.0, bookmaker, game);
+        stakes.insert(bookmaker.clone(), (game.0.to_string(), (1.0 / game.1) / sum));
     }
-    1.0
-}
-
-fn stakes(odds: Vec<f64>) -> Vec<f64> {
-    let mut stakes: Vec<f64> = Vec::new();
-
-    for i in 0..odds.len() {
-        let sum: f64 = odds.iter().map(|odd| 1.0 / odd).sum();
-        stakes.push((1.0 / odds[i]) / sum);
-    }
-
     stakes
 }
 
 fn main() {
-    // let stakes = stakes(optimal.clone());
-
     // let mut bet = Arbitrage{bet: 50.0,
     //                     round: 0.1,
     //                     odds: optimal.clone(),
@@ -112,7 +97,7 @@ fn main() {
         .json::<Value>()
         .unwrap();
 
-    for i in 0..10 {
+    for i in 0..5 {
         let mut odds: HashMap<String, ((String, f64), (String, f64))> = HashMap::new();
         for j in 0..9 {
             let bookmaker = &bets[i]["bookmakers"][j]["markets"][0]["outcomes"];
@@ -136,6 +121,9 @@ fn main() {
         }
 
         let optimal = optimal(odds.clone());
-        let stakes = stakes_hash(optimal);
+        let stakes = stakes(optimal.clone());
+
+        println!("{:?}", optimal);
+        println!("{:?}", stakes)
     }
 }
