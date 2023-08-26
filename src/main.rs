@@ -57,24 +57,44 @@ fn stakes(odds: Vec<(String, (String, f64))>) -> Vec<(String, (String, f64))> {
 
 fn main() {
     let client = Client::new();
-    // rugbyleague_nrl
-    // aussierules_afl 
-    let bets = client
-        .get("https://api.the-odds-api.com/v4/sports/boxing_boxing/odds/?regions=au&apiKey=d443ff82e9e449b15e401e238d5adc8a")
+
+    const API_KEY: &str = "be2a7f3768f69b180ee7e91f43f5afde";
+
+    let sports = client.get(format!("https://api.the-odds-api.com/v4/sports/?apiKey={}", API_KEY))
         .send()
         .unwrap()
         .json::<Value>()
         .unwrap();
+    
+    let mut sports_list = Vec::new();
 
-    for i in 0..20 {
-        let mut odds: Vec<(String, Vec<(String, f64)>)> = Vec::new();
-        for j in 0..10 {
-            let bookmaker = &bets[i]["bookmakers"][j]["markets"][0]["outcomes"];
-            let name = &bets[i]["bookmakers"][j]["key"];
+    for j in 0..sports.as_array().unwrap().len() {
+        sports_list.push(sports[j]["key"].to_string().replace('"', ""));
+    }
 
-            let mut event: Vec<(String, f64)> = Vec::new();
+    sports_list.retain(|word| !word.contains("winner"));
 
-                if name != "betfair_ex_au" {
+    for sport in sports_list {
+        println!("{}", sport);
+        let bets = client
+            .get(format!("https://api.the-odds-api.com/v4/sports/{}/odds/?regions=au&apiKey={}", sport, API_KEY))
+            .send()
+            .unwrap()
+            .json::<Value>()
+            .unwrap();
+
+        let bets_len = bets.as_array().unwrap().len();
+
+        for i in 0..bets_len {
+            let mut odds: Vec<(String, Vec<(String, f64)>)> = Vec::new();
+            for j in 0..10 {
+                let bookmaker = &bets[i]["bookmakers"][j]["markets"][0]["outcomes"];
+                let name = &bets[i]["bookmakers"][j]["key"];
+
+                let mut event: Vec<(String, f64)> = Vec::new();
+
+                    if name == "betfair_ex_au" { continue };
+
                     if *bookmaker != Value::Null {
                         for i in 0..bookmaker.as_array().unwrap().len() {
                             match bookmaker[i]["name"].as_str() {
@@ -89,22 +109,22 @@ fn main() {
                             }
                         }
                     }
-                }
-            odds.push((name.to_string(), event));
+
+                odds.push((name.to_string(), event));
+            }
+
+            let optimal = optimal(odds.clone());
+            let stakes = stakes(optimal.clone());
+
+            let bets = Arbitrage {
+                                    bet: 100.0,
+                                    round: 5.0,
+                                    odds: optimal.clone(),
+                                    stakes: stakes.clone()
+            };
+            let roi = bets.roi();
+            let color_code = if roi > 0.0 { "\x1b[32m" } else { "\x1b[31m" };
+            if roi > 0.0 { println!("ROI: {}{:.2}%\x1b[0m PROFIT: {}${:.2}\x1b[0m {:?}", color_code, roi, color_code, bets.profit(), optimal.clone()); }
         }
-
-        let optimal = optimal(odds.clone());
-        let stakes = stakes(optimal.clone());
-
-        let bets = Arbitrage {
-                                bet: 100.0,
-                                round: 5.0,
-                                odds: optimal.clone(),
-                                stakes: stakes
-        };
-        let roi = bets.roi();
-        let color_code = if roi > 0.0 { "\x1b[32m" } else { "\x1b[31m" };
-
-        println!("ROI: {}{:.2}%\x1b[0m PROFIT: {}${:.2}\x1b[0m", color_code, roi, color_code, bets.profit());
     }
 }
