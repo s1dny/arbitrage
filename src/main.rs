@@ -1,5 +1,9 @@
-use reqwest::blocking::Client;
+use std::env;
+use dotenv::dotenv;
 use serde_json::Value;
+
+mod api;
+use api::{fetch_sports, fetch_bets};
 
 struct Arbitrage {
     bet: f64,
@@ -56,33 +60,17 @@ fn stakes(odds: Vec<(String, (String, f64))>) -> Vec<(String, (String, f64))> {
 }
 
 fn main() {
-    let client = Client::new();
+    dotenv().ok();
+    let api_key = env::var("API_KEY").expect("API_KEY not set in .env");
 
-    const API_KEY: &str = "be2a7f3768f69b180ee7e91f43f5afde";
-
-    let sports = client.get(format!("https://api.the-odds-api.com/v4/sports/?apiKey={}", API_KEY))
-        .send()
-        .unwrap()
-        .json::<Value>()
-        .unwrap();
-    
-    let mut sports_list = Vec::new();
-
-    for j in 0..sports.as_array().unwrap().len() {
-        sports_list.push(sports[j]["key"].to_string().replace('"', ""));
-    }
+    let mut sports_list = fetch_sports(api_key.clone());
 
     sports_list.retain(|word| !word.contains("winner"));
 
     for sport in sports_list {
         println!("{}", sport);
-        let bets = client
-            .get(format!("https://api.the-odds-api.com/v4/sports/{}/odds/?regions=au&apiKey={}", sport, API_KEY))
-            .send()
-            .unwrap()
-            .json::<Value>()
-            .unwrap();
 
+        let bets = fetch_bets(api_key.clone(), sport.clone());
         let bets_len = bets.as_array().unwrap().len();
 
         for i in 0..bets_len {
@@ -93,22 +81,22 @@ fn main() {
 
                 let mut event: Vec<(String, f64)> = Vec::new();
 
-                    if name == "betfair_ex_au" { continue };
+                if name == "betfair_ex_au" { continue };
 
-                    if *bookmaker != Value::Null {
-                        for i in 0..bookmaker.as_array().unwrap().len() {
-                            match bookmaker[i]["name"].as_str() {
-                                Some(outcome) => {
-                                    if let Some(price) = bookmaker[i]["price"].as_f64() {
-                                        event.push((outcome.to_string(), price));
-                                    }
+                if *bookmaker != Value::Null {
+                    for k in 0..bookmaker.as_array().unwrap().len() {
+                        match bookmaker[k]["name"].as_str() {
+                            Some(outcome) => {
+                                if let Some(price) = bookmaker[k]["price"].as_f64() {
+                                    event.push((outcome.to_string(), price));
                                 }
-                                None => {
-                                    eprintln!("Error: Failed to parse name at index {}", i);
-                                }
+                            }
+                            None => {
+                                eprintln!("Error: Failed to parse name at index {}", k);
                             }
                         }
                     }
+                }
 
                 odds.push((name.to_string(), event));
             }
