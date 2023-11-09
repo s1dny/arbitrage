@@ -4,14 +4,18 @@ Uses [The Odds API](https://the-odds-api.com/) to find arbitrage opportunities i
 
 ## Usage
 
--   Clone the repo  
-     `git clone https://github.com/k4yp/arbitrage.git`
--   Install dependencies  
-     `cargo build`
--   Add your API key to the `.env` file  
-     `echo "API_KEY=your_key_here" > .env`
--   Run the project  
-     `cargo run`
+Clone the repo  
+```
+git clone https://github.com/k4yp/arbitrage.git
+```
+Add your API key to the `.env` file  
+``` 
+echo "API_KEY=your_key_here" > .env
+```
+Run the project  
+```
+cargo run
+```
 
 ## Example results
 
