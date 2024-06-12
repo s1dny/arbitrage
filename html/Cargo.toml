@@ -1,0 +1,11 @@
+[package]
+name = "html"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ammonia = "4.0.0"
+html-escape = "0.2.13"
+maplit = "1.0.2"
+sanitize_html = "0.8.1"
+scraper = "0.19.0"

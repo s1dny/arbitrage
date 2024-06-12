@@ -35,7 +35,7 @@ fn optimal(odds: Vec<(String, Vec<(String, f64)>)>) -> Vec<(String, (String, f64
 
     for i in 0..odds.len() {
         let bookmaker = &odds[i];
-        for j in 0..bookmaker.1.len() {
+        for j in 0..bookmaker.1.len().min(optimal.len()) {
             if bookmaker.1[j].1 > optimal[j].1.1 {
                 optimal[j].0 = bookmaker.0.clone();
                 optimal[j].1 = bookmaker.1[j].clone();
