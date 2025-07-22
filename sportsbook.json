@@ -1,0 +1,38 @@
+{
+    "sportsbook": [
+        {
+            "sport": "Basketball",
+            "games": [
+                {
+                    "team_1": "Lakers",
+                    "odds_1": 1.85,
+                    "team_2": "Warriors",
+                    "odds_2": 2.1
+                },
+                {
+                    "team_1": "Bulls",
+                    "odds_1": 2.3,
+                    "team_2": "Celtics",
+                    "odds_2": 1.75
+                }
+            ]
+        },
+        {
+            "sport": "Football",
+            "games": [
+                {
+                    "team_1": "Cowboys",
+                    "odds_1": 1.95,
+                    "team_2": "Packers",
+                    "odds_2": 1.85
+                },
+                {
+                    "team_1": "Patriots",
+                    "odds_1": 2.5,
+                    "team_2": "Chiefs",
+                    "odds_2": 1.6
+                }
+            ]
+        }
+    ]
+}
