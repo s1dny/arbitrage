@@ -1,0 +1,685 @@
+{
+    "sportsbooks": {
+        "name": "ladbrokes",
+        "link": "https://www.ladbrokes.com.au/sports",
+        "sports": [
+            {
+                "valid": true,
+                "name": "american_football",
+                "link": "https://www.ladbrokes.com.au/sports/american-football",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "afl",
+                "link": "https://www.ladbrokes.com.au/sports/australian-rules",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "baseball",
+                "link": "https://www.ladbrokes.com.au/sports/baseball",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_us",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/usa/nba",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_australia",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/australia/australian-nbl",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_champions_league",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/champions-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_israel",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/israeli-national-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_norway",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/norwegian-blno",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_sweden",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/swedish-ligan",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_philippines",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/filipino-pba",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_denmark",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/danish-basketligaen",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_china",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/chinese-cba",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_brazil",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/brazilian-nbb",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_hong_kong",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/hong-kong-basketball-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_euroleague_men",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/euroleague-men-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_euroleague_women",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/euroleague-women-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_croatia",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/croatian-a-1",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "basketball_fiba",
+                "link": "https://www.ladbrokes.com.au/sports/basketball/rest-of-the-world/fiba-europe-cup",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "badminton_men",
+                "link": "https://www.ladbrokes.com.au/sports/badminton/yonex-sunrise-indonesian-masters-men-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "badminton_women",
+                "link": "https://www.ladbrokes.com.au/sports/badminton/yonex-sunrise-indonesian-masters-women-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "netball_constellation_cup",
+                "link": "https://www.ladbrokes.com.au/sports/netball/constellation-cup",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_us",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/usa",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_uk",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/great-britain/british-elite-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_czechia_1",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/europe/czech-extraliga",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_czechia_2",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/europe/czech-chance-liga",
+                "games": []
+            },
+            {
+                        "valid": true,
+                "name": "ice_hockey_sweden",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/europe/swedish-shl",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_sweden_allsvenskan",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/europe/swedish-allsvenskan",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_finland",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/europe/finnish-liiga",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_switzerland_1",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/europe/swiss-nla",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_switzerland_2",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/europe/swiss-nlb",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_france",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/europe/french-ligue-magnus",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_germany",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/europe/german-del",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ice_hockey_denmark",
+                "link": "https://www.ladbrokes.com.au/sports/ice-hockey/europe/danish-al-bank-ligaen",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "boxing",
+                "link": "https://www.ladbrokes.com.au/sports/boxing",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "cricket",
+                "link": "https://www.ladbrokes.com.au/sports/cricket",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "darts",
+                "link": "https://www.ladbrokes.com.au/sports/darts",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "rugby_union",
+                "link": "https://www.ladbrokes.com.au/sports/rugby-union",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_australia",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/australia/a-league-men",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_spain",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/spain/spanish-la-liga",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_germany",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/germany/german-bundesliga",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_france",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/france/french-ligue-1",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_italy",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/italy/italian-serie-a",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_spain",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/spain/spanish-la-liga",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_spain",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/spain/spanish-la-liga",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "uefa_champions_league",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/uefa/uefa-champions-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_us",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/americas/us-major-league-soccer",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_brazil_1",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/americas/brazilian-serie-a",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_brazil_2",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/americas/brazilian-serie-b",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_argentina",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/americas/argentinian-primera-division",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_peru",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/americas/peruvian-primera-division",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_venezuela",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/americas/venezuelan-primera-division",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_chile",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/americas/chilean-primera-division",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_ireland",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/uk-ireland/irish-premier-division",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_uk",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/uk-ireland/premier-league",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_northern_ireland",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/uk-ireland/northern-irish-premiership",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_scotland",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/uk-ireland/scotland-premiership",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_fa_cup",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/uk-ireland/fa-cup",
+                "games": []
+            },
+
+            {
+                "valid": true,
+                "name": "soccer_efl_trophy",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/uk-ireland/efl-trophy",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_efl_championship",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/uk-ireland/championship",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_uk_1",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/uk-ireland/league-one",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_uk_2",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/uk-ireland/league-two",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_iraq",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/asia/iraqi-premier-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_india",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/asia/indian-super-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_women",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/international/international-friendlies-women-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_afc",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/international/afc-challenge-cup",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "soccer_egypt",
+                "link": "https://www.ladbrokes.com.au/sports/soccer/rest-of-the-world/egyptian-premier-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "rugby_league",
+                "link": "https://www.ladbrokes.com.au/sports/rugby-league/pacific-championships",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "rugby_france",
+                "link": "https://www.ladbrokes.com.au/sports/rugby-union/top-14",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "rugby_union",
+                "link": "https://www.ladbrokes.com.au/sports/rugby-union/internationals",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "table_tennis_czechia",
+                "link": "https://www.ladbrokes.com.au/sports/table-tennis/czech-liga-pro",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "table_tennis",
+                "link": "https://www.ladbrokes.com.au/sports/table-tennis/tt-elite-series-men",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "ufc",
+                "link": "https://www.ladbrokes.com.au/sports/mma/ufc-fight-night-moreno-vs-albazi",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_brazil",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/brazil/brazilian-superliga-men-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_bulgaria",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/bulgaria/bulgarian-nvl-superliga",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_finland_men",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/finland/finnish-mestaruusliiga",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_finland_women",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/finland/finnish-women-s-mestaruusliiga",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_indonesia_men",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/indonesia/indonesian-division-utama",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_indonesia_women",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/indonesia/indonesian-division-utama-women-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_israel",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/israel/israel-premier-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_italy_women",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/italy/italy-serie-a-1-women-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_netherlands_men",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/netherlands/dutch-eredivisie",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_netherlands_women",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/netherlands/dutch-eredivisie-women-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_poland",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/poland/poland-plus-liga",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_serbia_men",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/serbia/serbian-cup",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_serbia_womens",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/serbia/serbian-cup-women-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_south_korea_men",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/south-korea/korean-v-league-men-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_south_korea_women",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/south-korea/korean-v-league-women-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "volleyball_turkey_women",
+                "link": "https://www.ladbrokes.com.au/sports/volleyball/turkey/turkish-vestel-venus-sultanlar-league-women-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "gaelic_football",
+                "link": "https://www.ladbrokes.com.au/sports/gaelic-sports/gaelic-football-all-gaelic-football-club-football",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "darts_modus",
+                "link": "https://www.ladbrokes.com.au/sports/darts/modus-darts-super-series",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_austria",
+                "link": "https://www.ladbrokes.com.au/sports/handball/austria/austrian-hla",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_denmark",
+                "link": "https://www.ladbrokes.com.au/sports/handball/denmark/danish-handball-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_france",
+                "link": "https://www.ladbrokes.com.au/sports/handball/france/french-d-1-men-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_germany",
+                "link": "https://www.ladbrokes.com.au/sports/handball/germany/german-bundesliga-men-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_iran",
+                "link": "https://www.ladbrokes.com.au/sports/handball/iran/iran-handball-league",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_israel",
+                "link": "https://www.ladbrokes.com.au/sports/handball/israel/israeli-division-1",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_poland_women",
+                "link": "https://www.ladbrokes.com.au/sports/handball/poland/polish-superliga-women",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_spain",
+                "link": "https://www.ladbrokes.com.au/sports/handball/spain/spanish-copa-del-rey",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_sweden",
+                "link": "https://www.ladbrokes.com.au/sports/handball/sweden/swedish-elitserien-men-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_turkey",
+                "link": "https://www.ladbrokes.com.au/sports/handball/turkey/turkish-superlig",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball",
+                "link": "https://www.ladbrokes.com.au/sports/handball/world-club-competitions/champions-league-men-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "handball_ehf",
+                "link": "https://www.ladbrokes.com.au/sports/handball/world-club-competitions/ehf-cup-men-s",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "cricket_australia_women",
+                "link": "https://www.ladbrokes.com.au/sports/cricket/wbbl",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "cricket_test",
+                "link": "https://www.ladbrokes.com.au/sports/cricket/test-matches",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "cricket_odi",
+                "link": "https://www.ladbrokes.com.au/sports/cricket/odi",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "cricket_odi_women",
+                "link": "https://www.ladbrokes.com.au/sports/cricket/women-s-o-di",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "tennis_atp_paris",
+                "link": "https://www.ladbrokes.com.au/sports/tennis/atp-paris",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "tennis_hong_kong_women",
+                "link": "https://www.ladbrokes.com.au/sports/tennis/wta-hong-kong",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "tennis_jiujiang_women",
+                "link": "https://www.ladbrokes.com.au/sports/tennis/wta-jiujiang",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "tennis_merdida_women",
+                "link": "https://www.ladbrokes.com.au/sports/tennis/wta-merida",
+                "games": []
+            },
+            {
+                "valid": true,
+                "name": "tennis_santa_cruz_women",
+                "link": "https://www.ladbrokes.com.au/sports/tennis/wta-santa-cruz",
+                "games": []
+            }
+        ]
+    }
+}
