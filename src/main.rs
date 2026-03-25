@@ -2,6 +2,7 @@ use std::env;
 
 use anyhow::Result;
 use dotenv::dotenv;
+use indicatif::{ProgressBar, ProgressStyle};
 
 mod api;
 use api::{fetch_events, fetch_sports, Outcome};
@@ -99,16 +100,29 @@ fn main() -> Result<()> {
     let mut sports = fetch_sports(&api_key)?;
     sports.retain(|s| !s.contains("winner"));
 
+    let mut found_any = false;
+
+    let pb = ProgressBar::new(sports.len() as u64);
+    pb.set_style(
+        ProgressStyle::default_bar()
+            .template("{bar:30.blue/dim} {pos}/{len} {msg:.dim}")
+            .unwrap()
+            .progress_chars("██░"),
+    );
+
     for sport in &sports {
-        println!("{sport}");
+        pb.set_message(sport.clone());
 
         let events = match fetch_events(&api_key, sport) {
             Ok(e) => e,
             Err(err) => {
-                eprintln!("Error fetching {sport}: {err}");
+                pb.suspend(|| eprintln!("Error fetching {sport}: {err}"));
+                pb.inc(1);
                 continue;
             }
         };
+
+        let mut sport_printed = false;
 
         for event in &events {
             let best_odds = find_best_odds(&event.bookmakers);
@@ -119,19 +133,42 @@ fn main() -> Result<()> {
             let arb = Arbitrage::new(best_odds);
             let roi = arb.roi();
 
-            if roi > 0.0 {
-                let odds_summary: Vec<_> = arb
-                    .odds
-                    .iter()
-                    .map(|o| format!("{}: {} @ {:.2}", o.bookmaker, o.outcome.name, o.outcome.price))
-                    .collect();
-                println!(
-                    "ROI: \x1b[32m{roi:.2}%\x1b[0m PROFIT: \x1b[32m${:.2}\x1b[0m [{}]",
-                    arb.profit(),
-                    odds_summary.join(", ")
-                );
+            let same_bookmaker = arb.odds.windows(2).all(|w| w[0].bookmaker == w[1].bookmaker);
+
+            if roi > 0.0 && !same_bookmaker {
+                if !sport_printed {
+                    pb.suspend(|| println!("\n\x1b[1;36m{sport}\x1b[0m"));
+                    sport_printed = true;
+                    found_any = true;
+                }
+
+                pb.suspend(|| {
+                    println!(
+                        "  \x1b[1m{} vs {}\x1b[0m",
+                        event.home_team, event.away_team
+                    );
+                    println!(
+                        "  ROI \x1b[1;32m{roi:.2}%\x1b[0m  |  Profit \x1b[1;32m${:.2}\x1b[0m on ${:.0} bet",
+                        arb.profit(),
+                        arb.bet
+                    );
+                    for (odd, &stake) in arb.odds.iter().zip(&arb.stakes) {
+                        println!(
+                            "    \x1b[33m{}\x1b[0m  {}: \x1b[1m{:.2}\x1b[0m  (stake ${:.2})",
+                            odd.bookmaker, odd.outcome.name, odd.outcome.price, stake * arb.bet
+                        );
+                    }
+                    println!();
+                });
             }
         }
+
+        pb.inc(1);
+    }
+
+    pb.finish_and_clear();
+    if !found_any {
+        println!("No arbitrage opportunities found.");
     }
 
     Ok(())

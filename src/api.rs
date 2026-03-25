@@ -11,6 +11,8 @@ pub struct Sport {
 
 #[derive(Deserialize)]
 pub struct Event {
+    pub home_team: String,
+    pub away_team: String,
     pub bookmakers: Vec<Bookmaker>,
 }
 
