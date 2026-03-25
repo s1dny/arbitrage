@@ -1,118 +1,138 @@
 use std::env;
+
+use anyhow::Result;
 use dotenv::dotenv;
-use serde_json::Value;
 
 mod api;
-use api::{fetch_sports, fetch_bets};
+use api::{fetch_events, fetch_sports, Outcome};
+
+const BET_AMOUNT: f64 = 100.0;
+const SKIP_BOOKMAKERS: &[&str] = &["betfair_ex_au"];
+
+struct BestOdd {
+    bookmaker: String,
+    outcome: Outcome,
+}
 
 struct Arbitrage {
     bet: f64,
-    round: f64,
-    odds: Vec<(String, (String, f64))>,
-    stakes: Vec<(String, (String, f64))>
+    odds: Vec<BestOdd>,
+    stakes: Vec<f64>,
 }
 
 impl Arbitrage {
-    fn payout(&self) -> f64 {
-        let mut total = 0.0;
-        for i in 0..self.odds.len(){
-            total += self.stakes[i].1.1 * self.odds[i].1.1;
+    fn new(odds: Vec<BestOdd>) -> Self {
+        let stakes = compute_stakes(&odds);
+        Self {
+            bet: BET_AMOUNT,
+            odds,
+            stakes,
         }
+    }
+
+    fn payout(&self) -> f64 {
+        let total: f64 = self
+            .odds
+            .iter()
+            .zip(&self.stakes)
+            .map(|(odd, &stake)| stake * odd.outcome.price)
+            .sum();
         total / self.odds.len() as f64 * self.bet
     }
 
     fn profit(&self) -> f64 {
-        Arbitrage::payout(&self) - self.bet
+        self.payout() - self.bet
     }
 
     fn roi(&self) -> f64 {
-        Arbitrage::profit(&self) * 100.0 / Arbitrage::payout(&self)
+        self.profit() * 100.0 / self.bet
     }
 }
 
-fn optimal(odds: Vec<(String, Vec<(String, f64)>)>) -> Vec<(String, (String, f64))> {
-    let mut optimal = vec![(String::new(), (String::new(), 0.0)); odds[0].1.len()];
+fn find_best_odds(bookmakers: &[api::Bookmaker]) -> Vec<BestOdd> {
+    let outcomes = match bookmakers.iter().find(|b| !b.markets.is_empty()) {
+        Some(b) => &b.markets[0].outcomes,
+        None => return Vec::new(),
+    };
 
-    for i in 0..odds.len() {
-        let bookmaker = &odds[i];
-        for j in 0..bookmaker.1.len().min(optimal.len()) {
-            if bookmaker.1[j].1 > optimal[j].1.1 {
-                optimal[j].0 = bookmaker.0.clone();
-                optimal[j].1 = bookmaker.1[j].clone();
+    let mut best: Vec<BestOdd> = outcomes
+        .iter()
+        .map(|o| BestOdd {
+            bookmaker: String::new(),
+            outcome: o.clone(),
+        })
+        .collect();
+
+    // Initialize with lowest possible prices so any real bookmaker wins
+    for b in &mut best {
+        b.outcome.price = 0.0;
+    }
+
+    for bookmaker in bookmakers {
+        if SKIP_BOOKMAKERS.contains(&bookmaker.key.as_str()) {
+            continue;
+        }
+        let outcomes = match bookmaker.markets.first() {
+            Some(m) => &m.outcomes,
+            None => continue,
+        };
+        for (i, outcome) in outcomes.iter().enumerate().take(best.len()) {
+            if outcome.price > best[i].outcome.price {
+                best[i].bookmaker = bookmaker.key.clone();
+                best[i].outcome = outcome.clone();
             }
         }
     }
 
-    optimal
+    best
 }
 
-fn stakes(odds: Vec<(String, (String, f64))>) -> Vec<(String, (String, f64))> {
-    let mut stakes: Vec<(String, (String, f64))> = Vec::new();
-    let mut sum = 0.0;
-
-    for (_, game) in &odds{
-        sum += 1.0 / game.1
-    }
-    for (bookmaker, game) in &odds{
-        stakes.push((bookmaker.clone(), (game.0.to_string(), (1.0 / game.1) / sum)));
-    }
-    stakes
+fn compute_stakes(odds: &[BestOdd]) -> Vec<f64> {
+    let sum: f64 = odds.iter().map(|o| 1.0 / o.outcome.price).sum();
+    odds.iter().map(|o| (1.0 / o.outcome.price) / sum).collect()
 }
 
-fn main() {
+fn main() -> Result<()> {
     dotenv().ok();
     let api_key = env::var("API_KEY").expect("API_KEY not set in .env");
 
-    let mut sports_list = fetch_sports(api_key.clone());
+    let mut sports = fetch_sports(&api_key)?;
+    sports.retain(|s| !s.contains("winner"));
 
-    sports_list.retain(|word| !word.contains("winner"));
+    for sport in &sports {
+        println!("{sport}");
 
-    for sport in sports_list {
-        println!("{}", sport);
+        let events = match fetch_events(&api_key, sport) {
+            Ok(e) => e,
+            Err(err) => {
+                eprintln!("Error fetching {sport}: {err}");
+                continue;
+            }
+        };
 
-        let bets = fetch_bets(api_key.clone(), sport.clone());
-        let bets_len = bets.as_array().unwrap().len();
-
-        for i in 0..bets_len {
-            let mut odds: Vec<(String, Vec<(String, f64)>)> = Vec::new();
-            for j in 0..10 {
-                let bookmaker = &bets[i]["bookmakers"][j]["markets"][0]["outcomes"];
-                let name = &bets[i]["bookmakers"][j]["key"];
-
-                let mut event: Vec<(String, f64)> = Vec::new();
-
-                if name == "betfair_ex_au" { continue };
-
-                if *bookmaker != Value::Null {
-                    for k in 0..bookmaker.as_array().unwrap().len() {
-                        match bookmaker[k]["name"].as_str() {
-                            Some(outcome) => {
-                                if let Some(price) = bookmaker[k]["price"].as_f64() {
-                                    event.push((outcome.to_string(), price));
-                                }
-                            }
-                            None => {
-                                eprintln!("Error: Failed to parse name at index {}", k);
-                            }
-                        }
-                    }
-                }
-
-                odds.push((name.to_string(), event));
+        for event in &events {
+            let best_odds = find_best_odds(&event.bookmakers);
+            if best_odds.is_empty() {
+                continue;
             }
 
-            let optimal = optimal(odds.clone());
-            let stakes = stakes(optimal.clone());
+            let arb = Arbitrage::new(best_odds);
+            let roi = arb.roi();
 
-            let bets = Arbitrage {
-                                    bet: 100.0,
-                                    round: 5.0,
-                                    odds: optimal.clone(),
-                                    stakes: stakes.clone()
-            };
-            let roi = bets.roi();
-            let color_code = if roi > 0.0 { "\x1b[32m" } else { "\x1b[31m" };
-            if roi > 0.0 { println!("ROI: {}{:.2}%\x1b[0m PROFIT: {}${:.2}\x1b[0m {:?}", color_code, roi, color_code, bets.profit(), optimal.clone()); }
+            if roi > 0.0 {
+                let odds_summary: Vec<_> = arb
+                    .odds
+                    .iter()
+                    .map(|o| format!("{}: {} @ {:.2}", o.bookmaker, o.outcome.name, o.outcome.price))
+                    .collect();
+                println!(
+                    "ROI: \x1b[32m{roi:.2}%\x1b[0m PROFIT: \x1b[32m${:.2}\x1b[0m [{}]",
+                    arb.profit(),
+                    odds_summary.join(", ")
+                );
+            }
         }
     }
+
+    Ok(())
 }
